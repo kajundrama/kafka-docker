@@ -26,7 +26,7 @@ if [[ -z "$KAFKA_ADVERTISED_PORT" && \
   -z "$KAFKA_LISTENERS" && \
   -z "$KAFKA_ADVERTISED_LISTENERS" && \
   -S /var/run/docker.sock ]]; then
-    KAFKA_ADVERTISED_PORT=$(docker port "$(hostname)" $KAFKA_PORT | sed -r 's/.*:(.*)/\1/g')
+    KAFKA_ADVERTISED_PORT=$(docker port "$(hostname)" $KAFKA_PORT | sed -r 's/.*:(.*)/\1/g' | head -n1) 
     export KAFKA_ADVERTISED_PORT
 fi
 
@@ -52,7 +52,7 @@ fi
 if [[ -n "$HOSTNAME_COMMAND" ]]; then
     HOSTNAME_VALUE=$(eval "$HOSTNAME_COMMAND")
 
-    # Replace any occurences of _{HOSTNAME_COMMAND} with the value
+    # Replace any occurrences of _{HOSTNAME_COMMAND} with the value
     IFS=$'\n'
     for VAR in $(env); do
         if [[ $VAR =~ ^KAFKA_ && "$VAR" =~ "_{HOSTNAME_COMMAND}" ]]; then
@@ -65,7 +65,7 @@ fi
 if [[ -n "$PORT_COMMAND" ]]; then
     PORT_VALUE=$(eval "$PORT_COMMAND")
 
-    # Replace any occurences of _{PORT_COMMAND} with the value
+    # Replace any occurrences of _{PORT_COMMAND} with the value
     IFS=$'\n'
     for VAR in $(env); do
         if [[ $VAR =~ ^KAFKA_ && "$VAR" =~ "_{PORT_COMMAND}" ]]; then
